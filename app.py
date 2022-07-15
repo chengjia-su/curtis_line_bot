@@ -34,9 +34,9 @@ bubble = '''
   "hero": {{
     "type": "image",
     "url": "{img_src}",
-    "size": "fit",
+    "size": "full",
     "aspectRatio": "16:9",
-    "aspectMode": "cover",
+    "aspectMode": "fit",
     "action": {{
       "type": "uri",
       "uri": "{img_src}"
@@ -311,7 +311,7 @@ def query_car(number):
             soup = BeautifulSoup(rs.content, 'html.parser')
             meta = soup.find("meta", property="og:image")
             img_src = meta["content"]
-            print(img_src)
+            #print(img_src)
             if not img_src:
                 return None
             bubble_msg = bubble.format(img_src=img_src, number=data['車號'], name=data['稱號'], line_id=data['Line名稱'], place=data['常出沒地點'])
