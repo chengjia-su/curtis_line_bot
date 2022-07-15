@@ -34,7 +34,7 @@ bubble = '''
   "hero": {{
     "type": "image",
     "url": "{img_src}",
-    "size": "full",
+    "size": "fit",
     "aspectRatio": "16:9",
     "aspectMode": "cover",
     "action": {{
@@ -176,7 +176,10 @@ def query_car(number):
             #print(rs.content)
             soup = BeautifulSoup(rs.content, 'html.parser')
             meta = soup.find("meta", property="og:image")
-            img_src = meta["content"]
+            if meta and "content" in meta:
+                img_src = meta["content"]
+            else:
+                return None
             #print(img_src)
             if not img_src:
                 return None
