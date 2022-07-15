@@ -310,6 +310,7 @@ def query_car(number):
             #print(rs.content)
             soup = BeautifulSoup(rs.content, 'html.parser')
             meta = soup.find("meta", property="og:image")
+            print(meta)
             if meta and "content" in meta:
                 img_src = meta["content"]
             else:
