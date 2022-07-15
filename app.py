@@ -195,10 +195,10 @@ def register_car():
         alt_text='註冊車牌',
         template=ButtonsTemplate(
             title='CX30 中區車友交流群 - 車牌登記表單',
-            text='目前已更改註冊方式, 請自行填Google表單註冊車牌.\n注意!!上傳的圖片無法自行修改, 如需修改請洽版主/機器人作者\n目前透過google帳號管制人數, 避免表單外流. 沒有google帳號者, 可以找版主/機器人作者協助',
+            text='注意!!上傳的圖片無法自行修改, 請謹慎選擇',
             actions=[
                 URITemplateAction(
-                    label='點此開啟表單',
+                    label='點此開啟表單註冊車號',
                     uri='https://forms.gle/9N1VFcpbFz8FivkXA'
                 )
             ]
@@ -207,11 +207,6 @@ def register_car():
 
     return buttons_template_message
 
-def unregister_car():
-    TextSendMessage(text="如果重複註冊, 導致有多筆資料. 請洽版主or機器人作者進行修改")
-
-    return TextSendMessage    
-
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print("event.reply_token:", event.reply_token)
@@ -219,7 +214,7 @@ def handle_message(event):
 
     req_msg = str(event.message.text).strip()
         
-    if req_msg.startswith("++") and req_msg[2:6].isnumeric():
+    if req_msg.startswith("++"):
         reply_msg = register_car()
         line_bot_api.reply_message(event.reply_token, reply_msg)
         return 0
@@ -234,8 +229,8 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, reply_msg)
         return 0
 
-    if req_msg.startswith("--") and req_msg[2:6].isnumeric():
-        reply_msg = unregister_car()
+    if req_msg.startswith("--"):
+        reply_msg = TextSendMessage(text="如果重複註冊, 導致有多筆資料. 請洽版主or機器人作者進行修改")
         line_bot_api.reply_message(event.reply_token, reply_msg)
         return 0
         
