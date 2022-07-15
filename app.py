@@ -11,6 +11,7 @@ from bs4 import BeautifulSoup
 from flask import Flask, request, abort, render_template, url_for, redirect, flash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from imgurpython import ImgurClient
+import pygsheets
 
 from linebot import (
     LineBotApi, WebhookHandler
