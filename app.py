@@ -172,11 +172,11 @@ def query_car(number):
             img_id = data['上傳圖片'].split("=")[-1]
             img_url = "https://drive.google.com/file/d/{}/view".format(img_id)
             rs = requests.get(img_url)
-            print(rs.content)
+            #print(rs.content)
             soup = BeautifulSoup(rs.content, 'html.parser')
             meta = soup.find("meta", property="og:image")
             img_src = meta["content"]
-            print(img_src)
+            #print(img_src)
             if not img_src:
                 return None
             bubble_msg = bubble.format(img_src=img_src, number=data['車號'], name=data['名稱'], line_id=data['LINE上顯示名稱'], place=data['常出沒地點'])
@@ -184,7 +184,7 @@ def query_car(number):
     if all_bubble:
         carousel_msg = carousel.format(bubble=",".join(all_bubble))
         json_final = json.loads(carousel_msg)
-        print(json_final)
+        #print(json_final)
         return json_final
     else:
         return None
