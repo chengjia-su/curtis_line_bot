@@ -131,7 +131,141 @@ bubble = '''
   }}
 }}
 '''
-
+register_msg = '''
+{
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "md",
+    "action": {
+      "type": "uri",
+      "uri": "https://linecorp.com"
+    },
+    "contents": [
+      {
+        "type": "text",
+        "text": "註冊車牌",
+        "size": "xl",
+        "weight": "bold"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "註冊方式改為填寫Google表單",
+                "weight": "bold",
+                "margin": "sm",
+                "flex": 0
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "點選下方按鈕開啟表單",
+                "weight": "bold",
+                "margin": "sm",
+                "flex": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "注意!",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "上傳圖片後無法更改",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "避免重複填寫",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "type": "text",
+        "text": "登入google帳號為了管控人數"
+      },
+      {
+        "type": "text",
+        "text": "避免圖片塞爆雲端空間"
+      },
+      {
+        "type": "text",
+        "text": "無google帳號者可找版主協助"
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "button",
+        "style": "primary",
+        "color": "#905c44",
+        "margin": "xxl",
+        "action": {
+          "type": "uri",
+          "label": "點擊開啟表單",
+          "uri": "https://forms.gle/osiPE9sxrknwMmdr6"
+        }
+      }
+    ]
+  }
+}
+'''
 app = Flask(__name__)
 
 line_bot_api = LineBotApi(os.environ.get("ACCESS_TOKEN"))
@@ -194,21 +328,8 @@ def query_car(number):
         return None
 
 def register_car():
-    buttons_template_message = TemplateSendMessage(
-        alt_text='註冊車牌',
-        template=ButtonsTemplate(
-            title='CX30 中區車友交流群 - 車牌登記表單',
-            text='注意!!上傳的圖片無法自行修改, 請謹慎選擇',
-            actions=[
-                URITemplateAction(
-                    label='點此開啟表單註冊車號',
-                    uri='https://forms.gle/9N1VFcpbFz8FivkXA'
-                )
-            ]
-        )
-    )
-
-    return buttons_template_message
+    json_final = json.loads(register_msg)
+    return json_final
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -218,7 +339,8 @@ def handle_message(event):
     req_msg = str(event.message.text).strip()
         
     if req_msg.startswith("++"):
-        reply_msg = register_car()
+        ret = register_car()
+        reply_msg = FlexSendMessage('註冊車牌表單', ret)
         line_bot_api.reply_message(event.reply_token, reply_msg)
         return 0
 
@@ -226,7 +348,7 @@ def handle_message(event):
         number = req_msg[1:5]
         ret = query_car(number)
         if ret is not None:
-            reply_msg = FlexSendMessage('query car result', ret)
+            reply_msg = FlexSendMessage('查詢車牌結果', ret)
         else:
             reply_msg = TextSendMessage(text="查詢車牌【{}】:\n尚無車主註冊".format(number))
         line_bot_api.reply_message(event.reply_token, reply_msg)
