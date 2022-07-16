@@ -35,8 +35,8 @@ bubble = '''
     "type": "image",
     "url": "{img_src}",
     "size": "full",
-    "aspectRatio": "16:9",
-    "aspectMode": "fit",
+    "aspectRatio": "20:13",
+    "aspectMode": "cover",
     "action": {{
       "type": "uri",
       "uri": "{img_src}"
