@@ -60,12 +60,12 @@ bubble = '''
         "contents": [
           {{
             "type": "box",
-            "layout": "baseline",
+            "layout": "vertical",
             "spacing": "sm",
             "contents": [
               {{
                 "type": "text",
-                "text": "所在群組",
+                "text": "群組",
                 "color": "#aaaaaa",
                 "size": "sm",
                 "flex": 1
@@ -76,7 +76,8 @@ bubble = '''
                 "wrap": true,
                 "color": "#666666",
                 "size": "sm",
-                "flex": 5
+                "flex": 5,
+                "offsetStart": "xl"
               }}
             ]
           }},
@@ -287,7 +288,7 @@ register_msg = '''
         "action": {
           "type": "uri",
           "label": "點擊開啟表單",
-          "uri": "{uri}"
+          "uri": "https://forms.gle/yPG6EYcvNFhEfQ6cA"
         }
       }
     ]
@@ -354,7 +355,6 @@ def query_car(number):
         return None
 
 def register_car():
-    show_register_msg = register_msg.format(uri=os.environ['REGISTER_URL'])
     json_final = json.loads(register_msg)
     return json_final
 
