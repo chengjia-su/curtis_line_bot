@@ -65,14 +65,14 @@ bubble = '''
             "contents": [
               {{
                 "type": "text",
-                "text": "暱稱",
+                "text": "所在群組",
                 "color": "#aaaaaa",
                 "size": "sm",
                 "flex": 1
               }},
               {{
                 "type": "text",
-                "text": "{name}",
+                "text": "{group}",
                 "wrap": true,
                 "color": "#666666",
                 "size": "sm",
@@ -208,7 +208,7 @@ register_msg = '''
         "contents": [
           {
             "type": "text",
-            "text": "上傳圖片後無法更改",
+            "text": "1. 上傳圖片後無法自行更改",
             "weight": "bold",
             "margin": "sm",
             "flex": 0,
@@ -222,7 +222,35 @@ register_msg = '''
         "contents": [
           {
             "type": "text",
-            "text": "避免重複填寫",
+            "text": "2. 避免重複填寫",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "3. 照片請放自己愛車照",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "車牌數字需入鏡(英文可遮蔽)",
             "weight": "bold",
             "margin": "sm",
             "flex": 0,
@@ -235,7 +263,7 @@ register_msg = '''
       },
       {
         "type": "text",
-        "text": "登入google帳號為了管控人數"
+        "text": "需要登入google帳號為了管控人數"
       },
       {
         "type": "text",
@@ -243,7 +271,7 @@ register_msg = '''
       },
       {
         "type": "text",
-        "text": "無google帳號者可找版主協助"
+        "text": "無google帳號者可找機器人作者協助"
       }
     ]
   },
@@ -259,7 +287,7 @@ register_msg = '''
         "action": {
           "type": "uri",
           "label": "點擊開啟表單",
-          "uri": "https://forms.gle/osiPE9sxrknwMmdr6"
+          "uri": "{uri}"
         }
       }
     ]
@@ -315,7 +343,7 @@ def query_car(number):
             if not img_src:
                 return None
             img_src = img_src.replace("=w1200-h630-p", "=w2400")
-            bubble_msg = bubble.format(img_src=img_src, number=data['車號'], name=data['稱號'], line_id=data['Line名稱'], place=data['常出沒地點'])
+            bubble_msg = bubble.format(img_src=img_src, number=data['車號'], name=data['所在群組(可多選)'], line_id=data['Line名稱'], place=data['常出沒地點'])
             all_bubble.append(bubble_msg)
     if all_bubble:
         carousel_msg = carousel.format(bubble=",".join(all_bubble))
@@ -326,6 +354,7 @@ def query_car(number):
         return None
 
 def register_car():
+    show_register_msg = register_msg.format(uri=os.environ['REGISTER_URL'])
     json_final = json.loads(register_msg)
     return json_final
 
@@ -353,7 +382,7 @@ def handle_message(event):
         return 0
 
     if req_msg.startswith("--"):
-        reply_msg = TextSendMessage(text="如果重複註冊, 導致有多筆資料. 請洽版主or機器人作者進行修改")
+        reply_msg = TextSendMessage(text="如果重複註冊, 導致有多筆資料. 請洽機器人作者進行修改")
         line_bot_api.reply_message(event.reply_token, reply_msg)
         return 0
         
