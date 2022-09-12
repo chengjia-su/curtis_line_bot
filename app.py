@@ -343,7 +343,7 @@ def query_car(number):
             if not img_src:
                 return None
             img_src = img_src.replace("=w1200-h630-p", "=w2400")
-            bubble_msg = bubble.format(img_src=img_src, number=data['車號'], name=data['所在群組(可多選)'], line_id=data['Line名稱'], place=data['常出沒地點'])
+            bubble_msg = bubble.format(img_src=img_src, number=data['車號'], group=data['所在群組(可多選)'], line_id=data['Line名稱'], place=data['常出沒地點'])
             all_bubble.append(bubble_msg)
     if all_bubble:
         carousel_msg = carousel.format(bubble=",".join(all_bubble))
