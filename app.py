@@ -295,6 +295,171 @@ register_msg = '''
   }
 }
 '''
+
+help_msg = '''
+{
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "md",
+    "action": {
+      "type": "uri",
+      "uri": "https://linecorp.com"
+    },
+    "contents": [
+      {
+        "type": "text",
+        "text": "小幫手使用說明",
+        "size": "xl",
+        "weight": "bold"
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "小幫手功能是用來查詢車友車牌",
+                "weight": "bold",
+                "margin": "sm",
+                "flex": 0
+              }
+            ]
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "text",
+                "text": "查看看車友是否註冊過",
+                "weight": "bold",
+                "margin": "sm",
+                "flex": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "用法:",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "輸入「C+車號」查詢車牌",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "例如: c5656",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "輸入「++」進行註冊",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "baseline",
+        "contents": [
+          {
+            "type": "text",
+            "text": "填完表單即完成註冊",
+            "weight": "bold",
+            "margin": "sm",
+            "flex": 0,
+            "color": "#ff0000"
+          }
+        ]
+      },
+      {
+        "type": "separator"
+      },
+      {
+        "type": "text",
+        "text": "如果有任何使用上問題"
+      },
+      {
+        "type": "text",
+        "text": "不要害羞直接提問"
+      },
+      {
+        "type": "text",
+        "text": "大家都很熱情的!"
+      }
+    ]
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "button",
+        "style": "primary",
+        "color": "#905c44",
+        "margin": "xxl",
+        "action": {
+          "type": "message",
+          "label": "點擊開始註冊!",
+          "text": "++"
+        }
+      }
+    ]
+  }
+}
+'''
+
 app = Flask(__name__)
 
 line_bot_api = LineBotApi(os.environ.get("ACCESS_TOKEN"))
@@ -358,6 +523,10 @@ def register_car():
     json_final = json.loads(register_msg)
     return json_final
 
+def dump_usage_msg():
+    json_final = json.loads(help_msg)
+    return json_final
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     print("event.reply_token:", event.reply_token)
@@ -383,6 +552,12 @@ def handle_message(event):
 
     if req_msg.startswith("--"):
         reply_msg = TextSendMessage(text="如果重複註冊, 導致有多筆資料. 請洽機器人作者進行修改")
+        line_bot_api.reply_message(event.reply_token, reply_msg)
+        return 0
+
+    if req_msg.startswith("?小幫手"):
+        ret = dump_usage_msg()
+        reply_msg = FlexSendMessage('小幫手說明', ret)
         line_bot_api.reply_message(event.reply_token, reply_msg)
         return 0
         
