@@ -501,10 +501,18 @@ def query_car(number):
             img_id = data['顯示照片'].split("=")[-1]
             img_url = "https://drive.google.com/file/d/{}/view".format(img_id)
             rs = requests.get(img_url)
-            #print(rs.content)
+            print(rs.content)
             soup = BeautifulSoup(rs.content, 'html.parser')
             meta = soup.find("meta", property="og:image")
-            img_src = meta["content"]
+            if meta:
+                img_src = meta["content"]
+            else:
+                try:
+                    for line in rs.content:
+                        print(line)
+                except Exception as e:
+                    print(e)
+                img_src = "https://lh4.googleusercontent.com/5P0TRsFBU2vXIBwQVZARwnHdnUNkP0VveAN4nA_KJn9BYA8jRDG8oJvs8ymZuiDqIBI=w1200-h630-p"
             #print(img_src)
             if not img_src:
                 return None
