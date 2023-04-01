@@ -495,7 +495,7 @@ def getsheet():
 
 def get_img_url(input_url):
     target_str = ""
-    for sub_str in str.split(',"'):
+    for sub_str in input_url.split(',"'):
         if "https" in sub_str and "viewer" in sub_str:
             target_str = sub_str[:-1]
             break
