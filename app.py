@@ -495,10 +495,12 @@ def getsheet():
 
 def get_img_url(input_url):
     target_str = ""
+    print(input_url)
     for sub_str in input_url.split(',"'):
         if "https" in sub_str and "viewer" in sub_str:
             target_str = sub_str[:-1]
             break
+    print(target_str)
     img_url = "{}=w1200-h630-p".format(target_str.split("=")[0])
 
 def query_car(number):
@@ -524,6 +526,7 @@ def query_car(number):
                     img_src = "https://lh4.googleusercontent.com/5P0TRsFBU2vXIBwQVZARwnHdnUNkP0VveAN4nA_KJn9BYA8jRDG8oJvs8ymZuiDqIBI=w1200-h630-p"
             #print(img_src)
             if not img_src:
+                print("img_src = {}".format(img_src))
                 img_src = "https://lh4.googleusercontent.com/5P0TRsFBU2vXIBwQVZARwnHdnUNkP0VveAN4nA_KJn9BYA8jRDG8oJvs8ymZuiDqIBI=w1200-h630-p"
             img_src = img_src.replace("=w1200-h630-p", "=w2400")
             bubble_msg = bubble.format(img_src=img_src, number=data['車號'], group=data['所在群組(可多選)'], line_id=data['Line名稱'], place=data['常出沒地點'])
