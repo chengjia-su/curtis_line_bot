@@ -493,6 +493,14 @@ def getsheet():
     records = wk1.get_all_records()
     return records
 
+def get_img_url(input_url):
+    target_str = ""
+    for sub_str in str.split(',"'):
+        if "https" in sub_str and "viewer" in sub_str:
+            target_str = sub_str[:-1]
+            break
+    img_url = "{}=w1200-h630-p".format(target_str.split("=")[0])
+
 def query_car(number):
     records = getsheet()
     all_bubble = []
@@ -510,13 +518,13 @@ def query_car(number):
                 try:
                     html_str = rs.content.decode("utf-8")
                     m = re.search(r'itemJson.+]', html_str)
-                    print(m.group())
+                    img_src = get_img_url(m.group())
                 except Exception as e:
                     print(e)
-                img_src = "https://lh4.googleusercontent.com/5P0TRsFBU2vXIBwQVZARwnHdnUNkP0VveAN4nA_KJn9BYA8jRDG8oJvs8ymZuiDqIBI=w1200-h630-p"
+                    img_src = "https://lh4.googleusercontent.com/5P0TRsFBU2vXIBwQVZARwnHdnUNkP0VveAN4nA_KJn9BYA8jRDG8oJvs8ymZuiDqIBI=w1200-h630-p"
             #print(img_src)
             if not img_src:
-                return None
+                img_src = "https://lh4.googleusercontent.com/5P0TRsFBU2vXIBwQVZARwnHdnUNkP0VveAN4nA_KJn9BYA8jRDG8oJvs8ymZuiDqIBI=w1200-h630-p"
             img_src = img_src.replace("=w1200-h630-p", "=w2400")
             bubble_msg = bubble.format(img_src=img_src, number=data['車號'], group=data['所在群組(可多選)'], line_id=data['Line名稱'], place=data['常出沒地點'])
             all_bubble.append(bubble_msg)
