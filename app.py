@@ -500,7 +500,7 @@ def get_img_url(input_url):
             target_str = sub_str[:-1]
             break
     target_str = target_str.split("=")[0]
-    target_str = target_str.split("/")[-1]
+    target_str = target_str.split("\")[0]
     img_url = "{}=w1200-h630-p".format(target_str.split("=")[0])
     print(img_url)
     return img_url
