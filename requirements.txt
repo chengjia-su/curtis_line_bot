@@ -22,3 +22,4 @@ line-bot-sdk
 imgurpython==1.1.7
 psycopg2
 pygsheets
+urllib3
